@@ -3,5 +3,3 @@ python-dotenv
 nest_asyncio
 openai
 agents
-tensorflow_probability
-tensorflow>=2.20.0
