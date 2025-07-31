@@ -31,6 +31,9 @@ run_config = RunConfig(
     tracing_disabled=True,
 )
 
+@cl.on_chat_start
+async def start():
+    await cl.Message(content="Welcome to the AI Chatbot Agent!").send()
 
 @function_tool
 def get_updated_products(query: str) -> str:
@@ -112,3 +115,5 @@ async def handle_message(message: cl.Message):
 
 
 
+if __name__ == "__main__":
+    cl.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8000)))
