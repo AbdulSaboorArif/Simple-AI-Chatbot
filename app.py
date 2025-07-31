@@ -110,3 +110,5 @@ async def handle_message(message: cl.Message):
     await cl.Message(content=f"Response: {result.final_output}").send()
     print(f"Response:{result.final_output}")  # Uncomment to print the final output in the console
 
+
+

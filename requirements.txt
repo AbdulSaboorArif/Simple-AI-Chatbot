@@ -2,4 +2,4 @@ chainlit
 python-dotenv
 nest_asyncio
 openai
-agents
+openai-agents
