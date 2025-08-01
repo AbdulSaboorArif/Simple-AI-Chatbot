@@ -114,6 +114,3 @@ async def handle_message(message: cl.Message):
     print(f"Response:{result.final_output}")  # Uncomment to print the final output in the console
 
 
-
-if __name__ == "__app__":
-    cl.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8000)))
