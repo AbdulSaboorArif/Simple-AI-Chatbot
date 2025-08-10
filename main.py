@@ -126,10 +126,19 @@ async def chat_endpoint(chat_message: ChatMessage):
     try:
         result = await Runner.run(ai_chatbot_agent, chat_message.message, run_config=run_config)
         return {"response": result.final_output}
+        print(f"Response: {result.final_output}")
     except Exception as e:
         return {"error": str(e)}
 
 
+# @cl.on_message
+# async def handle_message(message: cl.Message):
+#     """
+#     Chainlit message handler to process incoming messages.
+#     """
+#     result = await Runner.run(ai_chatbot_agent, message.content, run_config=run_config)
+#     await cl.Message(content=f"Response: {result.final_output}").send()
+#     print(f"Response: {result.final_output}")
 
 
 
