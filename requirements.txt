@@ -3,3 +3,4 @@ python-dotenv
 nest_asyncio
 openai
 openai-agents
+uvicorn

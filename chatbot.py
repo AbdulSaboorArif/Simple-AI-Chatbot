@@ -4,19 +4,16 @@
 import os
 import chainlit as cl
 from agents import Agent, Runner, AsyncOpenAI ,OpenAIChatCompletionsModel, function_tool, RunConfig, RunContextWrapper
+from fastapi import FastAPI, HTTPException
 from dotenv import load_dotenv, find_dotenv
-from fastapi import FastAPI
-from pydantic import BaseModel
 import nest_asyncio
 nest_asyncio.apply() 
 load_dotenv(find_dotenv())
 
-
-# FastAPI app
 app = FastAPI()
 
 
-
+# Load environment variables
 gemini_api_key = os.getenv("GEMINI_API_KEY")
 if not gemini_api_key:
     raise ValueError("GEMINI_API_KEY environment variable is not set.")
@@ -33,11 +30,13 @@ model = OpenAIChatCompletionsModel(
     openai_client=external_provider,
 )
 
+# Run configuration
 run_config = RunConfig(
     model=model,
     model_provider=external_provider,
     tracing_disabled=True,
 )
+
 
 @cl.on_chat_start
 async def start():
@@ -114,23 +113,11 @@ ai_chatbot_agent = Agent(
     ],
 )
 
-class ChatMessage(BaseModel):
-    message: str
 
-
-@app.post("/chat")
-async def chat_endpoint(chat_message: ChatMessage):
-    """
-    FastAPI endpoint to handle chat messages.
-    """
-    try:
-        result = await Runner.run(ai_chatbot_agent, chat_message.message, run_config=run_config)
-        return {"response": result.final_output}
-    except Exception as e:
-        return {"error": str(e)}
-
-
-
-
+@cl.on_message
+async def handle_message(message: cl.Message):
+    result = await Runner.run(ai_chatbot_agent, message.content, run_config=run_config)
+    await cl.Message(content=f"Response: {result.final_output}").send()
+    print(f"Response:{result.final_output}")  # Uncomment to print the final output in the console
 
 
